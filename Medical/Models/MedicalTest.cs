@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Medical.Models
 {
@@ -18,6 +14,13 @@ namespace Medical.Models
         Lab = 6
     }
 
+    public enum TestStatus
+    {
+        Scheduled = 1,
+        Done = 2,
+        Cancelled = 3
+    }
+
     [Table("medical_tests")]
     public class MedicalTest
     {
@@ -25,17 +28,28 @@ namespace Medical.Models
         [Column("id")]
         public long Id { get; set; }
 
-        [Column("appointment_id")]
-        public long AppointmentId { get; set; }
 
-        [ForeignKey(nameof(AppointmentId))]
-        public Appointment Appointment { get; set; } = null!;
+        [Column("patient_id")]
+        public long PatientId { get; set; }
+
+        [ForeignKey(nameof(PatientId))]
+        public Patient Patient { get; set; } = null!;
+
+
+        [Column("doctor_id")]
+        public long DoctorId { get; set; }
+
+        [ForeignKey(nameof(DoctorId))]
+        public Doctor Doctor { get; set; } = null!;
 
         [Column("type")]
         public TestType Type { get; set; }
 
-        [Column("ordered_at")]
-        public DateTimeOffset OrderedAt { get; set; } = DateTimeOffset.UtcNow;
+        [Column("scheduled_at")]
+        public DateTimeOffset ScheduledAt { get; set; }
+
+        [Column("status")]
+        public TestStatus Status { get; set; } = TestStatus.Scheduled;
 
         [Column("result")]
         public string? Result { get; set; }

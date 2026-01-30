@@ -28,13 +28,6 @@ namespace Medical.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task<long> CreateDoctorAsync(Doctor d)
-        {
-            _db.Doctors.Add(d);
-            await _db.SaveChangesAsync();
-            return d.Id;
-        }
-
         public Task<List<Specialty>> GetSpecialtiesAsync()
             => _db.Specialties.OrderBy(x => x.Name).ToListAsync();
 

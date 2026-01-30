@@ -18,27 +18,54 @@ namespace Medical.Seed
 
             if (!await context.Specialties.AnyAsync())
             {
-                var cardiology = new Specialty
+                var specialties = new[]
                 {
-                    Name = "Cardiology"
+                    new Specialty { Name = "Opća medicina" },
+                    new Specialty { Name = "Kardiologija" },
+                    new Specialty { Name = "Radiologija" }
                 };
 
-                context.Specialties.Add(cardiology);
+                context.Specialties.AddRange(specialties);
                 await context.SaveChangesAsync();
             }
 
             if (!await context.Doctors.AnyAsync())
             {
-                var specialty = await context.Specialties.FirstAsync();
+                var general = await context.Specialties
+                    .FirstAsync(s => s.Name == "Opća medicina");
 
-                context.Doctors.Add(new Doctor
+                var cardio = await context.Specialties
+                    .FirstAsync(s => s.Name == "Kardiologija");
+
+                var radio = await context.Specialties
+                    .FirstAsync(s => s.Name == "Radiologija");
+
+                var doctors = new[]
                 {
-                    FirstName = "Ivan",
-                    LastName = "Ivić",
-                    LicenseNo = "DOC-001",
-                    SpecialtyId = specialty.Id
-                });
+                    new Doctor
+                    {
+                        FirstName = "Ivan",
+                        LastName = "Ivić",
+                        LicenseNo = "DOC-001",
+                        SpecialtyId = general.Id
+                    },
+                    new Doctor
+                    {
+                        FirstName = "Marko",
+                        LastName = "Marić",
+                        LicenseNo = "DOC-002",
+                        SpecialtyId = cardio.Id
+                    },
+                    new Doctor
+                    {
+                        FirstName = "Ana",
+                        LastName = "Anić",
+                        LicenseNo = "DOC-003",
+                        SpecialtyId = radio.Id
+                    }
+                };
 
+                context.Doctors.AddRange(doctors);
                 await context.SaveChangesAsync();
             }
         }

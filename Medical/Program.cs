@@ -44,13 +44,22 @@ class Program
         var prescriptionService = new PrescriptionService(context);
         var medicalTestService = new MedicalTestService(context);
 
+       //menu
+        var patientMenu = new PatientMenu(patientService);
+        var doctorMenu = new DoctorMenu(doctorService);
+        var appointmentMenu = new AppointmentMenu(appointmentService);
+        var prescriptionMenu = new PrescriptionMenu(prescriptionService);
+        var medicalTestMenu = new MedicalTestMenu(medicalTestService);
+
+   
         var menu = new Menu(
-            patientService,
-            doctorService,
-            appointmentService,
-            prescriptionService,
-            medicalTestService
-        );
+            patientMenu,
+            doctorMenu,
+            appointmentMenu,
+            prescriptionMenu,
+            medicalTestMenu
+            );
+
 
         await menu.RunAsync();
     }

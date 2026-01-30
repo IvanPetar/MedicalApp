@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Medical.Services
@@ -14,12 +13,22 @@ namespace Medical.Services
         private readonly MedicalContext _db;
         public PrescriptionService(MedicalContext db) => _db = db;
 
+        
         public async Task<long> EnsureMedicationAsync(string name, string? form, decimal? strengthMg)
         {
-            var existing = await _db.Medications.FirstOrDefaultAsync(m => m.Name == name);
-            if (existing != null) return existing.Id;
+            var existing = await _db.Medications
+                .FirstOrDefaultAsync(m => m.Name == name);
 
-            var med = new Medication { Name = name, Form = form, StrengthMg = strengthMg };
+            if (existing != null)
+                return existing.Id;
+
+            var med = new Medication
+            {
+                Name = name,
+                Form = form,
+                StrengthMg = strengthMg
+            };
+
             _db.Medications.Add(med);
             await _db.SaveChangesAsync();
             return med.Id;
@@ -27,7 +36,12 @@ namespace Medical.Services
 
         public async Task<long> CreatePrescriptionAsync(long patientId, long doctorId)
         {
-            var p = new Prescription { PatientId = patientId, DoctorId = doctorId };
+            var p = new Prescription
+            {
+                PatientId = patientId,
+                DoctorId = doctorId
+            };
+
             _db.Prescriptions.Add(p);
             await _db.SaveChangesAsync();
             return p.Id;
@@ -42,6 +56,7 @@ namespace Medical.Services
                 Dosage = dosage,
                 Days = days
             });
+
             await _db.SaveChangesAsync();
         }
 
@@ -52,5 +67,24 @@ namespace Medical.Services
                 .Where(p => p.PatientId == patientId)
                 .OrderByDescending(p => p.IssuedAt)
                 .ToListAsync();
+
+   
+        public async Task DeleteItemAsync(long itemId)
+        {
+            var item = await _db.PrescriptionItems.FindAsync(itemId)
+                ?? throw new Exception("Stavka recepta ne postoji");
+
+            _db.PrescriptionItems.Remove(item);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeletePrescriptionAsync(long prescriptionId)
+        {
+            var p = await _db.Prescriptions.FindAsync(prescriptionId)
+                ?? throw new Exception("Recept ne postoji");
+
+            _db.Prescriptions.Remove(p);
+            await _db.SaveChangesAsync();
+        }
     }
 }
