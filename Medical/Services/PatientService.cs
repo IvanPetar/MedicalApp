@@ -42,6 +42,9 @@ namespace Medical.Services
                 .Include(p => p.Prescriptions)
                     .ThenInclude(pr => pr.Items)
                         .ThenInclude(i => i.Medication)
+                .Include(m => m.MedicalTests)
+                    .ThenInclude(t => t.Doctor)
+                        .ThenInclude(d => d.Specialty)
                 .FirstOrDefaultAsync(p => p.Id == id);
 
         public async Task UpdateAddressAsync(long id, string city, string street, string no)

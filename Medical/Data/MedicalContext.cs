@@ -38,7 +38,7 @@ namespace Medical.Data
                 .HasDefaultValueSql("now()");
 
             modelBuilder.Entity<MedicalTest>()
-                .Property(t => t.OrderedAt)
+                .Property(t => t.ScheduledAt)
                 .HasDefaultValueSql("now()");
 
             // UNIQUE for Doctor.LicenseNo

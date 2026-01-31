@@ -109,7 +109,7 @@ namespace Medical.UI
                 Console.WriteLine("Neispravan tip.");
                 return;
             }
-
+            //change tracking
             await _appointments.UpdateAsync(
                 id,
                 new DateTimeOffset(dt, TimeSpan.Zero),

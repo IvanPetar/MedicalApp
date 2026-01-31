@@ -156,6 +156,19 @@ namespace Medical.UI
                         Console.WriteLine($"    * {it.Medication.Name} {it.Medication.StrengthMg}mg | {it.Dosage}");
                 }
             }
+            if (p.MedicalTests.Any())
+            {
+                Console.WriteLine("\nSpecijalisticke Pretrage:");
+                foreach (var t in p.MedicalTests.OrderByDescending(x => x.ScheduledAt))
+                {
+                    Console.WriteLine(
+                        $" - {t.ScheduledAt:dd.MM.yyyy HH:mm} | {t.Type} | Status: {t.Status} | Dr {t.Doctor.LastName}"
+                    );
+
+                    if (!string.IsNullOrWhiteSpace(t.Result))
+                        Console.WriteLine($"    Rezultat: {t.Result}");
+                }
+            }
         }
         private async Task UpdateAddress()
         {

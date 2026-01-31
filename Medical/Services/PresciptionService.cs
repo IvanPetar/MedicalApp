@@ -16,6 +16,7 @@ namespace Medical.Services
         
         public async Task<long> EnsureMedicationAsync(string name, string? form, decimal? strengthMg)
         {
+            // Check if medication with the same name already exists
             var existing = await _db.Medications
                 .FirstOrDefaultAsync(m => m.Name == name);
 
@@ -59,7 +60,7 @@ namespace Medical.Services
 
             await _db.SaveChangesAsync();
         }
-
+        //eager loading
         public Task<List<Prescription>> GetByPatientAsync(long patientId)
             => _db.Prescriptions
                 .Include(p => p.Doctor).ThenInclude(d => d.Specialty)

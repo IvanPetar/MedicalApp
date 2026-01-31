@@ -47,5 +47,7 @@ namespace Medical.Models
         // Navigations
         public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
         public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+
+        public ICollection<MedicalTest> MedicalTests { get; set; } = new List<MedicalTest>();
     }
 }
